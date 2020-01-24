@@ -50,51 +50,24 @@ MAPPACKS = [{
     'color': '20,0,255'
 }]
 
-# TODO: this somehow broke after switching to mongodb??
 @app.route('/getGJMapPacks21.php', methods=['GET', 'POST'])
 def get_mappacks():
-    page = int(get_arg('page', 0))
-
-    mappack_data = ''
-    mappack_ids = ''
-
-    for mappack in MAPPACKS:
-        mappack_ids += f"{mappack['id']},"
-        mappack_data += f"1:{mappack['id']}:2:{mappack['name']}:" \
-                        f"3:{mappack['levels']}:4:{mappack['stars']}:" \
-                        f"5:{mappack['coins']}:" \
-                        f"6:{mappack['difficulty']}:7:{mappack['color']}:8:{mappack['color']}|"
-
-    mappack_data = mappack_data[:-1]
-    mappack_ids = mappack_ids[:-1]
-
+    data = '|'.join(map(formats.mappack, MAPPACKS))
     return f'{mappack_data}#{len(MAPPACKS)}:0:10#{hashes.hash_mappack(MAPPACKS)}'
 
 @app.route('/getGJLevels21.php', methods=['GET', 'POST'])
 def get_levels():
-    search_type = int(get_arg('type', 0))
-
-    # TODO: additional search types (featured, original, etc)
-
-    data = get_arg('str')
-
-    level_ids = ''
-    result = ''
-    users = ''
+    # TODO: searching instead of just sending every level
 
     levels = tuple(db.levels.find({}))
-    for lvl in levels:
-        level_ids += f"{lvl['id']},"
-        result += formats.level_search(lvl) + '|'
-        users += f"16:mat:0|"
+
+    data = '|'.join(map(formats.level_search, levels))
     
-    level_ids = level_ids[:-1]
-    result = result[:-1]
-    users = users[:-1]
+    users = '16:mat:0' # placeholder
 
-    songs = ''
+    songs = '' # placeholder
 
-    return f'{result}#{users}#{songs}#{len(levels)}:0:10#{hashes.hash_levels(levels)}'
+    return f'{data}#{users}#{songs}#{len(levels)}:0:10#{hashes.hash_levels(levels)}'
 
 @app.route('/uploadGJLevel21.php', methods=['GET', 'POST'])
 def upload_level():

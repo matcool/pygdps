@@ -22,5 +22,5 @@ def hash_mappack(mappacks) -> str:
         - getGJMapPacks21
     """
     # '{first digit of mappack id}{last digit of mappack id}{coins}'
-    data = ''.join(f"{str(mp['id'])[0]}{str(mp['id'])[-1]}{mp['coins']}" for mp in mappacks)
+    data = ''.join(f"{str(mp['id'])[0]}{str(mp['id'])[-1]}{mp['stars']}{mp['coins']}" for mp in mappacks)
     return hashlib.sha1(bytes(data + 'xI25fpAapCQg', 'utf-8')).hexdigest()
