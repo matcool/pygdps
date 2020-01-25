@@ -61,10 +61,25 @@ def get_levels():
 
     # print(json.dumps(request.values.to_dict(), indent=2))
 
+    query = {}
+    sort = [('likes', pymongo.DESCENDING)]
+
+    search_str = get_arg('str')
+    if search_str:
+        if search_str.isnumeric():
+            query['id'] = int(search_str)
+            sort = None
+        else: query['name'] = {'$regex': search_str, '$options' : 'i'}
+
+    search_type = int(get_arg('type', 0))
+
     page = int(get_arg('page', 0))
     per_page = 10
     offset = page * per_page
-    levels = tuple(db.levels.find({}).skip(offset).limit(per_page))
+
+    levels = db.levels.find(query).skip(offset).limit(per_page)
+    if sort: levels.sort(sort)
+    levels = tuple(levels)
 
     data = '|'.join(map(formats.level_search, levels))
     
@@ -72,7 +87,7 @@ def get_levels():
 
     songs = '' # placeholder
 
-    return f'{data}#{users}#{songs}#{db.levels.count()}:{offset}:{per_page}#{hashes.hash_levels(levels)}'
+    return f'{data}#{users}#{songs}#{db.levels.count(query)}:{offset}:{per_page}#{hashes.hash_levels(levels)}'
 
 @app.route('/uploadGJLevel21.php', methods=['GET', 'POST'])
 def upload_level():
