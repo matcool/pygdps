@@ -59,7 +59,12 @@ def get_mappacks():
 def get_levels():
     # TODO: searching instead of just sending every level
 
-    levels = tuple(db.levels.find({}))
+    # print(json.dumps(request.values.to_dict(), indent=2))
+
+    page = int(get_arg('page', 0))
+    per_page = 10
+    offset = page * per_page
+    levels = tuple(db.levels.find({}).skip(offset).limit(per_page))
 
     data = '|'.join(map(formats.level_search, levels))
     
@@ -67,7 +72,7 @@ def get_levels():
 
     songs = '' # placeholder
 
-    return f'{data}#{users}#{songs}#{len(levels)}:0:10#{hashes.hash_levels(levels)}'
+    return f'{data}#{users}#{songs}#{db.levels.count()}:{offset}:{per_page}#{hashes.hash_levels(levels)}'
 
 @app.route('/uploadGJLevel21.php', methods=['GET', 'POST'])
 def upload_level():
