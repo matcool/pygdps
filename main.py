@@ -108,36 +108,12 @@ def upload_level():
     timestamp = time.time()
     
     game_version = int(get_arg('gameVersion', 0))
-    binary_version = int(get_arg('binaryVersion', 0))
-    username = get_arg('userName')
-    level_id = get_arg('levelID')
-    level_name = get_arg('levelName')
     level_desc = get_arg('levelDesc')
     if game_version < 20:
         level_desc = b64encode(bytes(level_desc, 'utf-8')).decode('utf-8')
-    level_version = int(get_arg('levelVersion'))
-    level_length = int(get_arg('levelLength'))
-    audio_track = int(get_arg('audioTrack'))
-
-    auto = bool(int(get_arg('auto', False)))
-    original = int(get_arg('original', 0))
-    two_player = bool(int(get_arg('twoPlayer', False)))
-    song_id = int(get_arg('songID', 0))
-    objects = int(get_arg('objects', 0))
-    coins = int(get_arg('coins', 0))
-    requested_stars = int(get_arg('requestedStars', 0))
-    unlisted = bool(int(get_arg('unlisted', False)))
-    ldm = bool(int(get_arg('ldm', False)))
-    
-    password = get_arg('password', 1)
-    if game_version > 17: password = 0
-    password = int(password)
 
     level_data = get_arg('levelString')
-    extra_data = get_arg('extraString', '29_29_29_40_29_29_29_29_29_29_29_29_29_29_29_29')
-    level_info = get_arg('levelInfo', 0)
-    secret = get_arg('secret')
-
+    level_name = get_arg('levelName')
     if not level_data or not level_name: return '-1'
     
     udid = get_arg('udid')
@@ -146,7 +122,6 @@ def upload_level():
 
     gjp = get_arg('gjp')
     account_id = get_arg('accountID')
-    # wont run if its None or 0
     if account_id:
         # check if account id matches gjp
         # currently no account system, so always fail
@@ -158,31 +133,31 @@ def upload_level():
         'name': level_name,
         'id': level_id,
         'level_data': level_data,
-        'extra_data': extra_data,
-        'level_info': level_info,
-        'timestamp': timestamp,
+        'extra_data': get_arg('extraString', '29_29_29_40_29_29_29_29_29_29_29_29_29_29_29_29'),
+        'level_info': get_arg('levelInfo', 0),
+        'timestamp': time.time(),
         'description': level_desc,
         'game_version': game_version,
-        'binary_version': binary_version,
-        'username': username,
-        'version': level_version,
-        'length': level_length,
+        'binary_version': int(get_arg('binaryVersion', 0)),
+        'username': get_arg('userName'),
+        'version': int(get_arg('levelVersion')),
+        'length': int(get_arg('levelLength')),
         # difference between audio_track and song_id is
         # audio_track is official songs and song_id is newgrounds aka custom songs
-        'audio_track': audio_track,
-        'song_id': song_id,
-        'auto': auto,
-        'password': password,
-        'original': original,
-        'two_player': two_player,
-        'objects': objects,
-        'coins': coins,
-        'requested_stars': requested_stars,
-        'secret': secret,
+        'audio_track': int(get_arg('audioTrack')),
+        'song_id': int(get_arg('songID', 0)),
+        'auto': bool(int(get_arg('auto', False))),
+        'password': int(get_arg('password', 0 if game_version > 17 else 1)),
+        'original': int(get_arg('original', 0)),
+        'two_player': bool(int(get_arg('twoPlayer', False))),
+        'objects': int(get_arg('objects', 0)),
+        'coins': int(get_arg('coins', 0)),
+        'requested_stars': int(get_arg('requestedStars', 0)),
+        'secret': get_arg('secret'),
         'user_id': -1, # no user_id yet
         'udid': udid, #??? i have no idea what this is
-        'unlisted': unlisted,
-        'ldm': ldm,
+        'unlisted': bool(int(get_arg('unlisted', False))),
+        'ldm': bool(int(get_arg('ldm', False))),
         # online stuff
         'downloads': 0,
         'likes': 0,
