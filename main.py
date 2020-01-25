@@ -43,7 +43,7 @@ def err(e):
 MAPPACKS = [{
     'id': 1,
     'name': 'Awesome',
-    'levels': '1',
+    'levels': '1,2',
     'stars': 10,
     'coins': 5,
     'difficulty': 2,
@@ -53,7 +53,7 @@ MAPPACKS = [{
 @app.route('/getGJMapPacks21.php', methods=['GET', 'POST'])
 def get_mappacks():
     data = '|'.join(map(formats.mappack, MAPPACKS))
-    return f'{mappack_data}#{len(MAPPACKS)}:0:10#{hashes.hash_mappack(MAPPACKS)}'
+    return f'{data}#{len(MAPPACKS)}:0:10#{hashes.hash_mappack(MAPPACKS)}'
 
 @app.route('/getGJLevels21.php', methods=['GET', 'POST'])
 def get_levels():
@@ -65,13 +65,27 @@ def get_levels():
     sort = [('likes', pymongo.DESCENDING)]
 
     search_str = get_arg('str')
-    if search_str:
+    search_type = int(get_arg('type', 0))
+    if search_str and search_type == 0:
         if search_str.isnumeric():
             query['id'] = int(search_str)
             sort = None
         else: query['name'] = {'$regex': search_str, '$options' : 'i'}
 
-    search_type = int(get_arg('type', 0))
+    if search_type and sort is not None:
+        if search_type == 1:
+            sort = [('downloads', pymongo.DESCENDING)]
+        # skip search_type == 2 as sorting by likes is already the default
+        elif search_type == 3:
+            last_week = time.time() - (7 * 24 * 60 * 60)
+            query['timestamp'] = {'$gt': last_week}
+        elif search_type == 4:
+            sort = [('id', pymongo.DESCENDING)]
+        elif search_type == 7: # magic
+            sort = query['objects'] = {'$gt', 3000}
+        elif search_type == 10: # mappacks
+            sort = None
+            query['id'] = {'$in': list(map(int, search_str.split(',')))}
 
     page = int(get_arg('page', 0))
     per_page = 10
