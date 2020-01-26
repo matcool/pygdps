@@ -31,6 +31,27 @@ def get_counter(name: str) -> int:
     )
     return doc['value']
 
+def get_user_id(ext_id: str, user_name: str) -> int:
+    registered = ext_id.isnumeric()
+
+    user = db.users.find_one({'ext_id': ext_id}, ['id'])
+    if user: return user['id']
+    user_id = get_counter('users')
+    user = db.users.insert_one({
+        'name': user_name,
+        'id': user_id,
+        'ext_id': ext_id,
+        'timestamp': time.time(),
+        'registered': registered
+    })
+    return user_id
+
+def get_user_str(user_id: int) -> str:
+    user = db.users.find_one({'id': user_id})
+    if user is None: return None
+    ext_id = user['ext_id'] if user['ext_id'].isnumeric() else 0
+    return f"{user_id}:{user['name']}:{ext_id}"
+
 @app.route('/')
 def root():
     return 'hi there'
@@ -93,7 +114,12 @@ def get_levels():
 
     data = '|'.join(map(formats.level_search, levels))
     
-    users = '16:mat:0' # placeholder
+    users = []
+    for level in levels:
+        user = get_user_str(level['user_id'])
+        if user is None: continue
+        users.append(user)
+    users = '|'.join(users)
 
     songs = '' # placeholder
 
@@ -111,6 +137,8 @@ def upload_level():
     level_data = get_arg('levelString')
     level_name = get_arg('levelName')
     if not level_data or not level_name: return '-1'
+
+    user_name = get_arg('userName')
     
     udid = get_arg('udid')
     if udid is not None and udid.isnumeric():
@@ -122,6 +150,8 @@ def upload_level():
         # check if account id matches gjp
         # currently no account system, so always fail
         return '-1'
+
+    user_id = get_user_id(udid, user_name)
 
     level_id = get_counter('levels')
 
@@ -151,7 +181,7 @@ def upload_level():
         'coins': int(get_arg('coins', 0)),
         'requested_stars': int(get_arg('requestedStars', 0)),
         'secret': get_arg('secret'),
-        'user_id': -1, # no user_id yet
+        'user_id': user_id,
         'udid': udid, #??? i have no idea what this is
         'unlisted': bool(int(get_arg('unlisted', False))),
         'ldm': bool(int(get_arg('ldm', False))),
@@ -162,11 +192,11 @@ def upload_level():
         # for some reason setting difficulty >= 60 seems to also be a demon, even though its supposed to use the a demon boolean
         # although there doesnt seem to be some difficulty value for auto, that actually needs to use the auto boolean value
         'demon': False,
-        'demon_diff': 0 # 1=easy 2=medium 3=hard 4=insane 5=extreme demon
+        'demon_diff': 0, # 1=easy 2=medium 3=hard 4=insane 5=extreme demon
         'stars': 0,
         'featured': False,
         'epic': False,
-        'rated_coins': False,
+        'rated_coins': False
     })
     return str(level_id)
 
