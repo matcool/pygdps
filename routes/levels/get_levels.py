@@ -49,10 +49,15 @@ def setup(ctx):
         data = '|'.join(map(formats.level_search, levels))
         
         users = []
+        _users = set() # set of users already on the users array
         for level in levels:
-            user = get_user_str(level['user_id'])
+            user_id = level['user_id']
+            if user_id in _users: continue
+            user = get_user_str(user_id)
             if user is None: continue
             users.append(user)
+            _users.add(user_id)
+        del _users
         users = '|'.join(users)
 
         songs = '' # placeholder

@@ -11,6 +11,7 @@ def setup(ctx):
     get_arg = ctx['get_arg']
     get_user_id = ctx['get_user_id']
     get_counter = ctx['get_counter']
+    check_acc_pw = ctx['check_acc_pw']
 
     @app.route('/uploadGJLevel21.php', methods=['GET', 'POST'])
     def upload_level():
@@ -27,18 +28,19 @@ def setup(ctx):
 
         user_name = get_arg('userName')
         
-        udid = get_arg('udid')
-        if udid is not None and udid.isnumeric():
+        ext_id = get_arg('udid')
+        if ext_id is not None and ext_id.isnumeric():
             return '-1'
 
         gjp = get_arg('gjp')
-        account_id = get_arg('accountID')
-        if account_id:
-            # check if account id matches gjp
-            # currently no account system, so always fail
-            return '-1'
+        acc_id = get_arg('accountID')
+        if acc_id and acc_id != '0':
+            ext_id = int(acc_id)
+            gjp = get_arg('gjp')
+            if not check_acc_pw(ext_id, gjp):
+                return '-1'
 
-        user_id = get_user_id(udid, user_name)
+        user_id = get_user_id(ext_id, user_name)
 
         level_id = get_counter('levels')
 
@@ -69,7 +71,7 @@ def setup(ctx):
             'requested_stars': int(get_arg('requestedStars', 0)),
             'secret': get_arg('secret'),
             'user_id': user_id,
-            'udid': udid, #??? i have no idea what this is
+            'ext_id': ext_id,
             'unlisted': bool(int(get_arg('unlisted', False))),
             'ldm': bool(int(get_arg('ldm', False))),
             # online stuff
