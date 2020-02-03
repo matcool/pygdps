@@ -1,7 +1,7 @@
 import xor
 import hashes
 import formats
-from base64 import b64decode
+from base64 import b64encode
 import pymongo
 import time
 
@@ -13,12 +13,15 @@ def setup(ctx):
     get_counter = ctx['get_counter']
     check_acc_pw = ctx['check_acc_pw']
 
+    @app.route('/uploadGJLevel.php', methods=['GET', 'POST'])
+    @app.route('/uploadGJLevel19.php', methods=['GET', 'POST'])
+    @app.route('/uploadGJLevel20.php', methods=['GET', 'POST'])
     @app.route('/uploadGJLevel21.php', methods=['GET', 'POST'])
     def upload_level():
         timestamp = time.time()
         
         game_version = int(get_arg('gameVersion', 0))
-        level_desc = get_arg('levelDesc')
+        level_desc = get_arg('levelDesc', '')
         if game_version < 20:
             level_desc = b64encode(bytes(level_desc, 'utf-8')).decode('utf-8')
 

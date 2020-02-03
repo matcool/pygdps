@@ -15,6 +15,9 @@ def setup(ctx):
     bool_arg = lambda x: str_bool(get_arg(x))
     colon_arr = lambda x: tuple(map(int, x.split(',')))
 
+    @app.route('/getGJLevels.php', methods=['GET', 'POST'])
+    @app.route('/getGJLevels19.php', methods=['GET', 'POST'])
+    @app.route('/getGJLevels20.php', methods=['GET', 'POST'])
     @app.route('/getGJLevels21.php', methods=['GET', 'POST'])
     def get_levels():
         query = {'unlisted': False}

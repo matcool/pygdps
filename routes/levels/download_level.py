@@ -9,6 +9,10 @@ def setup(ctx):
     db = ctx['db']
     get_arg = ctx['get_arg']
 
+    @app.route('/downloadGJLevel.php', methods=['GET', 'POST'])
+    @app.route('/downloadGJLevel19.php', methods=['GET', 'POST'])
+    @app.route('/downloadGJLevel20.php', methods=['GET', 'POST'])
+    @app.route('/downloadGJLevel21.php', methods=['GET', 'POST'])
     @app.route('/downloadGJLevel22.php', methods=['GET', 'POST'])
     def download_level():
         game_version = int(get_arg('gameVersion', 1))
