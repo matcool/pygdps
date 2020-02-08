@@ -1,13 +1,14 @@
 import xor
-from argon2 import PasswordHasher
 import time
+from typing import TYPE_CHECKING
+if TYPE_CHECKING: from context import Context
 
-def setup(ctx):
-    app = ctx['app']
-    db = ctx['db']
-    get_arg = ctx['get_arg']
-    get_counter = ctx['get_counter']
-    pw_hasher = PasswordHasher()
+def setup(ctx: 'Context'):
+    app = ctx.app
+    db = ctx.db
+    get_arg = ctx.get_arg
+    get_counter = ctx.get_counter
+    pw_hasher = ctx.pw_hasher
 
     @app.route('/accounts/loginGJAccount.php', methods=['GET', 'POST'])
     def login_account():

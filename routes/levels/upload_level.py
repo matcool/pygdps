@@ -4,14 +4,16 @@ import formats
 from base64 import b64encode
 import pymongo
 import time
+from typing import TYPE_CHECKING
+if TYPE_CHECKING: from context import Context
 
-def setup(ctx):
-    app = ctx['app']
-    db = ctx['db']
-    get_arg = ctx['get_arg']
-    get_user_id = ctx['get_user_id']
-    get_counter = ctx['get_counter']
-    check_acc_pw = ctx['check_acc_pw']
+def setup(ctx: 'Context'):
+    app = ctx.app
+    db = ctx.db
+    get_arg = ctx.get_arg
+    get_user_id = ctx.get_user_id
+    get_counter = ctx.get_counter
+    check_acc_pw = ctx.check_acc_pw
 
     @app.route('/uploadGJLevel.php', methods=['GET', 'POST'])
     @app.route('/uploadGJLevel19.php', methods=['GET', 'POST'])

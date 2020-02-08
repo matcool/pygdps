@@ -3,11 +3,13 @@ import hashes
 import formats
 from base64 import b64decode
 import pymongo
+from typing import TYPE_CHECKING
+if TYPE_CHECKING: from context import Context
 
-def setup(ctx):
-    app = ctx['app']
-    db = ctx['db']
-    get_arg = ctx['get_arg']
+def setup(ctx: 'Context'):
+    app = ctx.app
+    db = ctx.db
+    get_arg = ctx.get_arg
 
     @app.route('/downloadGJLevel.php', methods=['GET', 'POST'])
     @app.route('/downloadGJLevel19.php', methods=['GET', 'POST'])

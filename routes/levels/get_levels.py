@@ -5,12 +5,14 @@ from base64 import b64decode
 import pymongo
 from util import str_bool
 import time
+from typing import TYPE_CHECKING
+if TYPE_CHECKING: from context import Context
 
-def setup(ctx):
-    app = ctx['app']
-    db = ctx['db']
-    get_arg = ctx['get_arg']
-    get_user_str = ctx['get_user_str']
+def setup(ctx: 'Context'):
+    app = ctx.app
+    db = ctx.db
+    get_arg = ctx.get_arg
+    get_user_str = ctx.get_user_str
 
     bool_arg = lambda x: str_bool(get_arg(x))
     colon_arr = lambda x: tuple(map(int, x.split(',')))
