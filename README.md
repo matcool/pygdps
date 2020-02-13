@@ -1,6 +1,20 @@
 # PyGDPS [WIP]
 Geometry dash Private server written in python using Flask and MongoDB, highly based off [Cvolton/GMDprivateServer](https://github.com/Cvolton/GMDprivateServer)
 
+## Running
+Linux
+```bash
+export FLASK_APP=main.py
+export FLASK_ENV=development
+flask run
+```
+Windows
+```batch
+set FLASK_APP=main.py
+set FLASK_ENV=development
+flask run
+```
+
 ## Implemented
 - `/uploadGJLevel.php` - uploading a level works, and thats it (no replacing already uploaded level, etc)
 - `/getGJLevels.php` - searching by difficulty is missing
