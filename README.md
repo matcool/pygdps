@@ -2,13 +2,14 @@
 Geometry dash Private server written in python using Flask and MongoDB, highly based off [Cvolton/GMDprivateServer](https://github.com/Cvolton/GMDprivateServer)
 
 ## Running
-Linux
+Needs a local mongodb server running (no current way to change address)
+### Linux
 ```bash
 export FLASK_APP=main.py
 export FLASK_ENV=development
 flask run
 ```
-Windows
+### Windows
 ```batch
 set FLASK_APP=main.py
 set FLASK_ENV=development
