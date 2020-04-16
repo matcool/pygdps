@@ -17,6 +17,7 @@ def setup(ctx: 'Context'):
         udid = get_arg('udid')
 
         account = db.accounts.find_one({'name': user_name})
+        if account is None: return '-1'
 
         encrypted_pw = account.get('password')
 

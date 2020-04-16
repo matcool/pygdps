@@ -27,7 +27,7 @@ class Context():
 
     @staticmethod
     def get_user_id(ext_id: Union[int, str], user_name: str) -> int:
-        registered = type(ext_id) == int
+        registered = isinstance(ext_id, int)
 
         user = Context.db.users.find_one({'ext_id': ext_id}, ['id'])
         if user: return user['id']
