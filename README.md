@@ -23,3 +23,5 @@ flask run
 - `/downloadGJLevel.php` - daily levels dont work yet
 - `/accounts/registerGJAccount.php` - nothing much to say, it works (passwords are argon2 hashed)
 - `/accounts/loginGJAccount.php` - same as above
+- `/updateGJUserScore.php` - works fine
+- `/getGJUserInfo.php` - works fine but creator points, rank and etc are hardcoded
