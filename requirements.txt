@@ -1,3 +1,4 @@
 Flask==1.1.1
 pymongo==3.9.0
 argon2-cffi==19.2.0
+colorama==0.4.3
