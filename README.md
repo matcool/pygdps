@@ -7,7 +7,6 @@ Run `run.py`. Make sure you have a MongoDB server running as well.
 ## Implemented
 - `/uploadGJLevel.php` - uploading a level works, and thats it (no replacing already uploaded level, etc)
 - `/getGJLevels.php` - searching by difficulty is missing
-- `/getGJMapPacks.php` - mappacks are not yet stored in the db
 - `/downloadGJLevel.php` - daily levels dont work yet
 - `/accounts/registerGJAccount.php` - nothing much to say, it works (passwords are argon2 hashed)
 - `/accounts/loginGJAccount.php` - same as above
