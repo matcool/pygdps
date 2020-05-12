@@ -2,19 +2,7 @@
 Geometry dash Private server written in python using Flask and MongoDB, highly based off [Cvolton/GMDprivateServer](https://github.com/Cvolton/GMDprivateServer)
 
 ## Running
-Needs a local mongodb server running (no current way to change address)
-### Linux
-```bash
-export FLASK_APP=main.py
-export FLASK_ENV=development
-flask run
-```
-### Windows
-```batch
-set FLASK_APP=main.py
-set FLASK_ENV=development
-flask run
-```
+Run `run.py`. Make sure you have a MongoDB server running as well.
 
 ## Implemented
 - `/uploadGJLevel.php` - uploading a level works, and thats it (no replacing already uploaded level, etc)
